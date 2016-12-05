@@ -1,0 +1,34 @@
+﻿@model LeaveManagement.Web.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0) {
+        <div>
+            <p>
+                There are no external authentication services configured.
+            </p>
+        </div>
+    }
+    else {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
+            @Html.AntiForgeryToken()
+            <div class="login-social-link centered">
+                <p>or you can sign in via your social network</p>
+                @foreach (AuthenticationDescription p in loginProviders)
+                {
+                    <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                        @p.AuthenticationType
+                    </button>
+                }
+               
+            </div>
+        }
+    }
+}
+@*<div class="login-social-link centered">
+    <p>or you can sign in via your social network</p>
+    <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
+    <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
+</div>*@

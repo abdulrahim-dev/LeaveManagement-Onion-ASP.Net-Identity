@@ -1,0 +1,17 @@
+/packages/
+/LeaveManagement.Web/bin/
+/LeaveManagement.Web/obj/
+
+/LeaveManagement.Core/bin/
+/LeaveManagement.Core/obj/
+
+/LeaveManagement.Data/bin/
+/LeaveManagement.Data/obj/
+
+/LeaveManagement.Services/bin/
+/LeaveManagement.Services/obj/
+
+/LeaveManagement.DI/bin/
+/LeaveManagement.DI/obj/
+
+*.DS_Store

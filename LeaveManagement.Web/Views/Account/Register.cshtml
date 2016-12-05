@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_ExternalPageLayout.cshtml";
+}
+@model LeaveManagement.Web.Models.RegisterViewModel
+
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-login" }))
+{
+    @Html.AntiForgeryToken()
+    <h2 class="form-login-heading">Register</h2>
+    <div class="login-wrap">
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", autofocus = "autofocus", placeholder = "Name" })
+        <br />
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", autofocus = "autofocus", placeholder = "User ID" })
+        <br>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autofocus = "autofocus", placeholder = "Password", value="Sample@123" })
+        <br>
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", autofocus = "autofocus", placeholder = "Confirm Password", value = "Sample@123" })
+        <br>
+
+        <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> Register</button>
+        <span class="bg-danger">@Html.ValidationSummary(true)</span>
+
+    </div>
+}
