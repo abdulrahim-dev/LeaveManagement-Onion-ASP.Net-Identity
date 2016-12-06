@@ -10,7 +10,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LeaveManagement.Data
 {
-    public class LeaveContext : IdentityDbContext<ApplicationIdentityUser, ApplicationIdentityRole, int, ApplicationIdentityUserLogin, ApplicationIdentityUserRole, ApplicationIdentityUserClaim>, IEntitiesContext//DbContext
+    public class LeaveContext : IdentityDbContext<ApplicationIdentityUser, ApplicationIdentityRole, int, 
+        ApplicationIdentityUserLogin, ApplicationIdentityUserRole, ApplicationIdentityUserClaim>, IEntitiesContext//DbContext
     {
         public LeaveContext() : base("name=LeaveContextContextConnectionString")
         {

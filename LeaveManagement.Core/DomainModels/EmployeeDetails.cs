@@ -8,6 +8,8 @@ namespace LeaveManagement.Core.DomainModels
         public string Name { get; set; }
         public virtual int? UserId { get; set; }
 
+        public string ProfilePicturePath { get; set; }
+
         [ForeignKey("UserId")]
         public ApplicationIdentityUser ApplicationIdentityUser { get; set; }
     }
