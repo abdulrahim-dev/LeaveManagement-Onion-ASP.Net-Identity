@@ -17,7 +17,7 @@ namespace LeaveManagement.Web.Controllers
         private readonly IService<EmployeeDetails> _employeeService;
 
 
-        public AccountController(IApplicationUserManager userManager,IService<EmployeeDetails> employeeService)
+        public AccountController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
         {
             _userManager = userManager;
             _employeeService = employeeService;
@@ -30,7 +30,7 @@ namespace LeaveManagement.Web.Controllers
         {
             ViewBag.LoginProviders = _userManager.GetExternalAuthenticationTypes();
             ViewBag.ReturnUrl = returnUrl;
-           // var x = _studentRepo.GetStudents();
+            // var x = _studentRepo.GetStudents();
             return View();
         }
 
@@ -38,7 +38,7 @@ namespace LeaveManagement.Web.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
             ViewBag.LoginProviders = _userManager.GetExternalAuthenticationTypes();
@@ -53,6 +53,13 @@ namespace LeaveManagement.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var user = await _userManager.FindByNameAsync(model.UserName);
+                    if (user != null)
+                    {
+                        var emp = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
+                        Session["UserId"] = user.Id;
+                        if (emp != null) Session["Name"] = emp.Name;
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -122,7 +129,7 @@ namespace LeaveManagement.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        
+
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
@@ -144,6 +151,7 @@ namespace LeaveManagement.Web.Controllers
                         await _userManager.PasswordSignIn(model.Email, model.Password, false, shouldLockout: false);
                     if (loginStatus == SignInStatus.Success)
                     {
+
                         var currentuser = await _userManager.FindByNameAsync(model.Email);
                         if (currentuser != null)
                         {
@@ -153,10 +161,12 @@ namespace LeaveManagement.Web.Controllers
                                 UserId = currentuser.Id
                             };
                             await _employeeService.AddAsync(emp);
+                            Session["Name"] = emp.Name;
+                            Session["UserId"] = currentuser.Id;
                         }
-                        return RedirectToAction("Index","Home");
+                        return RedirectToAction("Index", "Home");
                     }
-                    
+
                 }
                 AddErrors(result);
             }
@@ -388,6 +398,7 @@ namespace LeaveManagement.Web.Controllers
         public ActionResult LogOff()
         {
             _userManager.SignOut();
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
 

@@ -13,12 +13,10 @@ namespace LeaveManagement.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IApplicationUserManager _userManager;
-        private readonly IService<EmployeeDetails> _employeeService;
 
-        public HomeController(IApplicationUserManager userManager,IService<EmployeeDetails> employeeService)
+        public HomeController(IApplicationUserManager userManager)
         {
             _userManager = userManager;
-            _employeeService = employeeService;
         }
 
         public string UserName
@@ -32,14 +30,9 @@ namespace LeaveManagement.Web.Controllers
 
         // GET: Home
         [Authorize]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            if (UserName != null)
-            {
-                var user = await _userManager.FindByNameAsync(UserName);
-                var emp = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
-                if (emp != null) ViewBag.Name = emp.Name;
-            }
+            ViewBag.PageName = "Home";
             return View();
         }
     }
