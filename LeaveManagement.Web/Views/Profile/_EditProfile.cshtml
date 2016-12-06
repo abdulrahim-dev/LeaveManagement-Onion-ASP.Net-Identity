@@ -1,0 +1,28 @@
+﻿@model LeaveManagement.Core.DomainModels.EmployeeDetails
+@using (Html.BeginForm("Edit", "Profile", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal style-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x=>x.UserId)
+    var profilePath = !string.IsNullOrEmpty(Model.ProfilePicturePath) ? "/ProfilePictures/" + Model.ProfilePicturePath : "";
+    var imageClass= !string.IsNullOrEmpty(Model.ProfilePicturePath) ? "block" : "none";
+    <div class="form-group">
+        <label class="col-sm-2 col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Name, new {@class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-sm-2 control-label">Upload Image:</label>
+        <div class="col-sm-10">
+            <img id="empImage" width="150" height="150" style="display: @imageClass; margin-bottom: 5px; border-radius: 5px;" src="@profilePath"/>
+            <input type="file" name="file" id="empimageUpload" style="width: 100%;" onchange="readUrl(this);" accept="image/gif, image/jpeg, image/png"/>
+            <button type="button" id="removeImage" class="btn btn-danger" style="display: none;margin-top: 5px">Remove</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-10">
+            <button type="submit" class="btn btn-default">Update</button>
+        </div>
+    </div>
+    <span class="bg-danger">@Html.ValidationSummary(true)</span>
+}

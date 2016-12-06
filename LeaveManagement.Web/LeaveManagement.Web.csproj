@@ -221,6 +221,7 @@
     <Content Include="Content\Theme\responsive_table.html" />
     <Content Include="Content\Theme\todo_list.html" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Views\web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config">
@@ -283,6 +284,7 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Shared\SideMenu.cshtml" />
+    <Content Include="Views\Profile\_EditProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -292,6 +294,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ProfilePictures\" />
+    <Folder Include="Views\BaseAuth\" />
     <Folder Include="Views\Product\" />
   </ItemGroup>
   <ItemGroup>

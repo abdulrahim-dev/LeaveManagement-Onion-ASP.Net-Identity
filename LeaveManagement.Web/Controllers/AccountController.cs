@@ -57,7 +57,7 @@ namespace LeaveManagement.Web.Controllers
                     if (user != null)
                     {
                         var emp = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
-                        Session["UserId"] = user.Id;
+                        Session["LEAVEPORTAL.AUTH"] = user.Id;
                         if (emp != null) Session["Name"] = emp.Name;
                     }
                     return RedirectToLocal(returnUrl);
@@ -162,7 +162,7 @@ namespace LeaveManagement.Web.Controllers
                             };
                             await _employeeService.AddAsync(emp);
                             Session["Name"] = emp.Name;
-                            Session["UserId"] = currentuser.Id;
+                            Session["LEAVEPORTAL.AUTH"] = currentuser.Id;
                         }
                         return RedirectToAction("Index", "Home");
                     }
