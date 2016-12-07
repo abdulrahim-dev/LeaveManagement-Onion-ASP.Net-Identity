@@ -24,15 +24,15 @@ namespace LeaveManagement.DI
             builder.RegisterModule<AutofacWebTypesModule>();
 
             // Registering Interfaces We have Created in Core Project
-            builder.RegisterGeneric(typeof(EntityRepository<>)).As(typeof(IRepository<>)).InstancePerHttpRequest();
-            builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerHttpRequest();
-            builder.RegisterType(typeof(UnitOfWork)).As(typeof(IUnitOfWork)).InstancePerHttpRequest();
+            builder.RegisterGeneric(typeof(EntityRepository<>)).As(typeof(IRepository<>)).InstancePerRequest();
+            builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerRequest();
+            builder.RegisterType(typeof(UnitOfWork)).As(typeof(IUnitOfWork)).InstancePerRequest();
 
             builder.Register<IEntitiesContext>(b =>
             {
                 var context = new LeaveContext();
                 return context;
-            }).InstancePerHttpRequest();
+            }).InstancePerRequest();
 
 
             builder.RegisterModule(new IdentityModule());

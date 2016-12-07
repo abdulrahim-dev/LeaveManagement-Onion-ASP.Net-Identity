@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LeaveManagement.Core.DomainModels;
+using LeaveManagement.Core.Identity;
 using LeaveManagement.Core.Services;
 using LeaveManagement.Web.Helper;
 
@@ -14,22 +15,36 @@ namespace LeaveManagement.Web.Controllers
 {
     public class ProfileController : Controller
     {
+        private readonly IApplicationUserManager _userManager;
         private readonly IService<EmployeeDetails> _employeeService;
 
-        public ProfileController(IService<EmployeeDetails> employeeService)
+        public ProfileController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
         {
+            _userManager = userManager;
             _employeeService = employeeService;
         }
 
+        public string UserName
+        {
+            get
+            {
+                var userName = User.Identity.Name;
+                return userName ?? "";
+            }
+        }
         // GET: Profile
         public ActionResult Edit()
         {
             ViewBag.PageName = "Profile";
-            var userId = Session["LEAVEPORTAL.AUTH"] != null ? Convert.ToInt32(Session["LEAVEPORTAL.AUTH"]) : 0;
-            if (userId != 0)
+            var user = _userManager.FindByName(UserName);
+            if (user != null)
             {
-                var model = _employeeService.GetAll().FirstOrDefault(x => x.UserId == userId);
-                return View(model);
+                var userId = user.Id;
+                if (userId != 0)
+                {
+                    var model = _employeeService.GetAll().FirstOrDefault(x => x.UserId == userId);
+                    return View(model);
+                }
             }
             return View();
 
@@ -62,7 +77,6 @@ namespace LeaveManagement.Web.Controllers
                     employee.ProfilePicturePath = file != null && file.ContentLength > 0?fileName:employee.ProfilePicturePath;
                     employee.Name = model.Name;
                     await _employeeService.UpdateAsync(employee);
-                    Session["Name"] = employee.Name;
                 }
                 return RedirectToAction("Edit");
             }

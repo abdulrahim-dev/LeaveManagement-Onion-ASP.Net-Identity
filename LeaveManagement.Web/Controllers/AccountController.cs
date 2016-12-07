@@ -53,13 +53,6 @@ namespace LeaveManagement.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    var user = await _userManager.FindByNameAsync(model.UserName);
-                    if (user != null)
-                    {
-                        var emp = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
-                        Session["LEAVEPORTAL.AUTH"] = user.Id;
-                        if (emp != null) Session["Name"] = emp.Name;
-                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using LeaveManagement.Core.DomainModels;
 using LeaveManagement.Core.Identity;
 using LeaveManagement.Core.Services;
+using LeaveManagement.Web.Models;
 
 namespace LeaveManagement.Web.Controllers
 {
@@ -34,19 +35,25 @@ namespace LeaveManagement.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            if (Session == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            ViewBag.PageName = "Home";
+            return View();
+        }
+
+        public PartialViewResult SideMenu(string pageName)
+        {
+            LayoutViewModel layoutViewModel=new LayoutViewModel();
             var user = _userManager.FindByName(UserName);
             if (user != null)
             {
                 var emp = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
-                Session["LEAVEPORTAL.AUTH"] = user.Id;
-                if (emp != null) Session["Name"] = emp.Name;
+                if (emp != null)
+                {
+                    layoutViewModel.Name = emp.Name;
+                    layoutViewModel.ProfilePath = emp.ProfilePicturePath;
+                    layoutViewModel.PageName = pageName;
+                }
             }
-            ViewBag.PageName = "Home";
-            return View();
+            return PartialView("SideMenu", layoutViewModel);
         }
     }
 }
