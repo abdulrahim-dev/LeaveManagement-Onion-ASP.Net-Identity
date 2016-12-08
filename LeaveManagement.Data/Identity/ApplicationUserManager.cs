@@ -4,11 +4,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using LeaveManagement.Core.DomainModels;
 using LeaveManagement.Core.DomainModels.Identity;
 using LeaveManagement.Data.Extensions;
 using Microsoft.AspNet.Identity;
 using LeaveManagement.Core.Identity;
+using LeaveManagement.Core.Services;
 using Microsoft.Owin.Security;
 
 namespace LeaveManagement.Data.Identity
@@ -19,14 +21,16 @@ namespace LeaveManagement.Data.Identity
     {
         private readonly UserManager<ApplicationIdentityUser, int> _userManager;
         private readonly IAuthenticationManager _authenticationManager;
+        private readonly IService<EmployeeDetails> _employeeService;
         private bool _disposed;
 
-        public ApplicationUserManager(UserManager<ApplicationIdentityUser, int> userManager, IAuthenticationManager authenticationManager)
+        public ApplicationUserManager(UserManager<ApplicationIdentityUser, int> userManager, IAuthenticationManager authenticationManager, IService<EmployeeDetails> employeeService)
         {
             _userManager = userManager;
             _authenticationManager = authenticationManager;
+            _employeeService = employeeService;
         }
-       
+
 
         public virtual string ApplicationCookie
         {
@@ -149,11 +153,19 @@ namespace LeaveManagement.Data.Identity
         {
             var applicationUser = user.ToApplicationUser();
             var flag = await _userManager.CheckPasswordAsync(applicationUser, password).ConfigureAwait(false);
+
+            //if (flag)
+            //{
+            //    var empdet = _employeeService.GetAll().FirstOrDefault(x => x.UserId == user.Id);
+            //    await AddClaimAsync(user.Id, new Claim("Name", empdet.Name));
+            //    await AddClaimAsync(user.Id, new Claim("UserId", empdet.UserId.ToString()));
+            //    // await AddClaimAsync(user.Id, new Claim(ClaimType, empdet.Name));
+            //}
             user.CopyApplicationIdentityUserProperties(applicationUser);
             return flag;
         }
 
-        public virtual async Task<ApplicationIdentityResult> ConfirmEmailAsync(int userId,  string token)
+        public virtual async Task<ApplicationIdentityResult> ConfirmEmailAsync(int userId, string token)
         {
             var identityResult = await _userManager.ConfirmEmailAsync(userId, token).ConfigureAwait(false);
             return identityResult.ToApplicationIdentityResult();
@@ -280,7 +292,7 @@ namespace LeaveManagement.Data.Identity
 
         public virtual async Task<string> GenerateChangePhoneNumberTokenAsync(int userId, string phoneNumber)
         {
-             return await _userManager.GenerateChangePhoneNumberTokenAsync(userId, phoneNumber).ConfigureAwait(false);
+            return await _userManager.GenerateChangePhoneNumberTokenAsync(userId, phoneNumber).ConfigureAwait(false);
         }
 
         public virtual async Task<string> GenerateEmailConfirmationTokenAsync(int userId)
@@ -383,7 +395,7 @@ namespace LeaveManagement.Data.Identity
 
         public virtual async Task<IList<string>> GetRolesAsync(int userId)
         {
-             return await _userManager.GetRolesAsync(userId).ConfigureAwait(false);
+            return await _userManager.GetRolesAsync(userId).ConfigureAwait(false);
         }
 
         public virtual async Task<string> GetSecurityStampAsync(int userId)
@@ -428,7 +440,7 @@ namespace LeaveManagement.Data.Identity
 
         public virtual async Task<bool> IsInRoleAsync(int userId, string role)
         {
-            return await _userManager.IsInRoleAsync(userId,role).ConfigureAwait(false);
+            return await _userManager.IsInRoleAsync(userId, role).ConfigureAwait(false);
         }
 
         public virtual async Task<bool> IsLockedOutAsync(int userId)
@@ -756,4 +768,7 @@ namespace LeaveManagement.Data.Identity
             _disposed = true;
         }
     }
+
+
+
 }

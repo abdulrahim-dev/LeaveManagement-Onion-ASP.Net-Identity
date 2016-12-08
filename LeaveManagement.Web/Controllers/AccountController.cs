@@ -14,12 +14,14 @@ namespace LeaveManagement.Web.Controllers
     public class AccountController : Controller
     {
         private IApplicationUserManager _userManager;
+        private readonly IApplicationRoleManager _roleManager;
         private readonly IService<EmployeeDetails> _employeeService;
 
 
-        public AccountController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public AccountController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<EmployeeDetails> employeeService)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _employeeService = employeeService;
         }
 
@@ -53,6 +55,16 @@ namespace LeaveManagement.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var user = _userManager.FindByName(model.UserName);
+                    var role = _userManager.GetRoles(user.Id).FirstOrDefault();
+                    if (role=="Admin")
+                    {
+                        return RedirectToAction("Index", "Admin", new { Area = "Admin" });
+                    }
+                    if (role == "User")
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -154,8 +166,6 @@ namespace LeaveManagement.Web.Controllers
                                 UserId = currentuser.Id
                             };
                             await _employeeService.AddAsync(emp);
-                            Session["Name"] = emp.Name;
-                            Session["LEAVEPORTAL.AUTH"] = currentuser.Id;
                         }
                         return RedirectToAction("Index", "Home");
                     }
