@@ -7,7 +7,7 @@ namespace LeaveManagement.Data.ConfigurationMapping
     /// Fluent API is another way to configure your domain classes. Fluent API provides more functionality for configuration than DataAnnotations....
     /// EntityTypeConfiguration is an important class in Fluent API. EntityTypeConfiguration provides you important methods to configure entities and its properties to override various Code-First conventions. It can be obtained by calling the Entity<TEntity>() method of DbModelBuilder class
     /// </summary>
-    public class EmployeeDetailsMap : EntityTypeConfiguration<EmployeeDetails>
+    public class EmployeeDetailsMap : EntityTypeConfiguration<UserProfile>
     {
         public EmployeeDetailsMap()
         {

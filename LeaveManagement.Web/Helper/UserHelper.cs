@@ -11,7 +11,7 @@ namespace LeaveManagement.Web.Helper
     public class UserHelper
     {
         private  readonly IApplicationUserManager _userManager;
-        private  readonly IService<EmployeeDetails> _employeeService;
+        private  readonly IService<UserProfile> _employeeService;
         public  string UserName
         {
             get
@@ -20,7 +20,7 @@ namespace LeaveManagement.Web.Helper
                 return userName ?? "";
             }
         }
-        public UserHelper(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public UserHelper(IApplicationUserManager userManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _employeeService = employeeService;

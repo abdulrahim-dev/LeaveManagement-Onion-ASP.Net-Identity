@@ -20,7 +20,7 @@ namespace LeaveManagement.Data
         }
 
         //New Tables
-        public DbSet<EmployeeDetails> Employee { get; set; }
+        public DbSet<UserProfile> Employee { get; set; }
 
         /// <summary>
         /// Fluent API is another way to configure your domain classes. Fluent API provides more functionality for configuration than DataAnnotations....

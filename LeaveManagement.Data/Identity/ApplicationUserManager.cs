@@ -21,10 +21,10 @@ namespace LeaveManagement.Data.Identity
     {
         private readonly UserManager<ApplicationIdentityUser, int> _userManager;
         private readonly IAuthenticationManager _authenticationManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IService<UserProfile> _employeeService;
         private bool _disposed;
 
-        public ApplicationUserManager(UserManager<ApplicationIdentityUser, int> userManager, IAuthenticationManager authenticationManager, IService<EmployeeDetails> employeeService)
+        public ApplicationUserManager(UserManager<ApplicationIdentityUser, int> userManager, IAuthenticationManager authenticationManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _authenticationManager = authenticationManager;

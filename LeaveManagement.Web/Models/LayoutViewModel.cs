@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using LeaveManagement.Core.DomainModels.Identity;
 
 namespace LeaveManagement.Web.Models
 {
@@ -9,8 +10,8 @@ namespace LeaveManagement.Web.Models
     {
         public string Name { get; set; }
 
-        public string ProfilePath { get; set; }
-
         public string PageName { get; set; }
+
+        
     }
 }

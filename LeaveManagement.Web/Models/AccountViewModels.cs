@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LeaveManagement.Core.DomainModels.Identity;
 
 namespace LeaveManagement.Web.Models
 {
@@ -90,6 +91,10 @@ namespace LeaveManagement.Web.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public List<ApplicationRole> ApplicationRoles { get; set; }
+
+        public string UserRole { get; set; }
     }
 
     public class ResetPasswordViewModel

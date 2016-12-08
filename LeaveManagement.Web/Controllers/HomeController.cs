@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using LeaveManagement.Core.DomainModels;
 using LeaveManagement.Core.Identity;
@@ -14,9 +10,9 @@ namespace LeaveManagement.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IApplicationUserManager _userManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IService<UserProfile> _employeeService;
 
-        public HomeController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public HomeController(IApplicationUserManager userManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _employeeService = employeeService;
@@ -49,7 +45,6 @@ namespace LeaveManagement.Web.Controllers
                 if (emp != null)
                 {
                     layoutViewModel.Name = emp.Name;
-                    layoutViewModel.ProfilePath = emp.ProfilePicturePath;
                     layoutViewModel.PageName = pageName;
                 }
             }

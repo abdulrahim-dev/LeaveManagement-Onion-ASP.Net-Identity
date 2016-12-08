@@ -16,9 +16,9 @@ namespace LeaveManagement.Web.Controllers
     public class ProfileController : Controller
     {
         private readonly IApplicationUserManager _userManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IService<UserProfile> _employeeService;
 
-        public ProfileController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public ProfileController(IApplicationUserManager userManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _employeeService = employeeService;
@@ -52,29 +52,13 @@ namespace LeaveManagement.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EmployeeDetails model, HttpPostedFileBase file)
+        public async Task<ActionResult> Edit(UserProfile model, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 var employee = _employeeService.GetAll().FirstOrDefault(x => x.UserId == model.UserId);
                 if (employee != null)
                 {
-                    var fileName = "";
-                    if (file != null && file.ContentLength > 0)
-                    {
-                        if (!string.IsNullOrEmpty(employee.ProfilePicturePath))
-                        {
-                            if (System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/"+employee.ProfilePicturePath)))
-                            {
-                                System.IO.File.SetAttributes(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/" + employee.ProfilePicturePath), FileAttributes.Normal);
-                                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/" + employee.ProfilePicturePath));
-                            }
-                        }
-                        fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-                        var path = Path.Combine(Server.MapPath("~/ProfilePictures/"), fileName);
-                        file.SaveAs(path);
-                    }
-                    employee.ProfilePicturePath = file != null && file.ContentLength > 0?fileName:employee.ProfilePicturePath;
                     employee.Name = model.Name;
                     await _employeeService.UpdateAsync(employee);
                 }

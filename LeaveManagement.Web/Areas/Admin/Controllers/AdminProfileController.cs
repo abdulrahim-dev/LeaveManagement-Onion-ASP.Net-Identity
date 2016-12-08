@@ -1,23 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LeaveManagement.Core.DomainModels;
+using LeaveManagement.Core.DomainModels.Identity;
 using LeaveManagement.Core.Identity;
 using LeaveManagement.Core.Services;
+using LeaveManagement.Web.Models;
 
 namespace LeaveManagement.Web.Areas.Admin.Controllers
 {
     public class AdminProfileController : Controller
     {
         private readonly IApplicationUserManager _userManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IApplicationRoleManager _roleManager;
+        private readonly IService<UserProfile> _employeeService;
 
-        public AdminProfileController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public AdminProfileController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _employeeService = employeeService;
         }
 
@@ -29,56 +34,61 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
                 return userName ?? "";
             }
         }
-        // GET: Profile
-        public ActionResult Edit()
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
+        public ActionResult Register()
         {
+            RegisterViewModel model = new RegisterViewModel();
             ViewBag.PageName = "Profile";
-            var user = _userManager.FindByName(UserName);
-            if (user != null)
-            {
-                var userId = user.Id;
-                if (userId != 0)
-                {
-                    var model = _employeeService.GetAll().FirstOrDefault(x => x.UserId == userId);
-                    return View(model);
-                }
-            }
-            return View();
-
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EmployeeDetails model, HttpPostedFileBase file)
-        {
-            if (ModelState.IsValid)
-            {
-                var employee = _employeeService.GetAll().FirstOrDefault(x => x.UserId == model.UserId);
-                if (employee != null)
-                {
-                    var fileName = "";
-                    if (file != null && file.ContentLength > 0)
-                    {
-                        if (!string.IsNullOrEmpty(employee.ProfilePicturePath))
-                        {
-                            if (System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/" + employee.ProfilePicturePath)))
-                            {
-                                System.IO.File.SetAttributes(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/" + employee.ProfilePicturePath), FileAttributes.Normal);
-                                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/ProfilePictures/" + employee.ProfilePicturePath));
-                            }
-                        }
-                        fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-                        var path = Path.Combine(Server.MapPath("~/ProfilePictures/"), fileName);
-                        file.SaveAs(path);
-                    }
-                    employee.ProfilePicturePath = file != null && file.ContentLength > 0 ? fileName : employee.ProfilePicturePath;
-                    employee.Name = model.Name;
-                    await _employeeService.UpdateAsync(employee);
-                }
-                return RedirectToAction("Edit");
-            }
-            ModelState.AddModelError("", "Please Try again.");
+            model.ApplicationRoles = _roleManager.GetRoles().ToList();
             return View(model);
         }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+
+        public async Task<ActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            else
+            {
+                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, Request.Url == null ? "" : Request.Url.Scheme);
+                    // await _userManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    // ViewBag.Link = callbackUrl;
+                    // return View("DisplayEmail");
+
+                    var currentuser = await _userManager.FindByNameAsync(model.Email);
+                    if (currentuser != null)
+                    {
+                        await _userManager.AddUserToRolesAsync(currentuser.Id, new List<string> { model.UserRole });
+                        UserProfile emp = new UserProfile
+                        {
+                            Name = model.Name,
+                            UserId = currentuser.Id
+                        };
+                        await _employeeService.AddAsync(emp);
+                    }
+                    return RedirectToAction("Index", "Admin");
+
+
+                }
+            }
+            // If we got this far, something failed, redisplay form
+
+            return View(model);
+        }
+
     }
 }

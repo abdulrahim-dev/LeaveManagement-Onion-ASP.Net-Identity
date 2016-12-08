@@ -14,9 +14,9 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly IApplicationUserManager _userManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IService<UserProfile> _employeeService;
 
-        public AdminController(IApplicationUserManager userManager, IService<EmployeeDetails> employeeService)
+        public AdminController(IApplicationUserManager userManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _employeeService = employeeService;
@@ -49,7 +49,6 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
                 if (emp != null)
                 {
                     layoutViewModel.Name = emp.Name;
-                    layoutViewModel.ProfilePath = emp.ProfilePicturePath;
                     layoutViewModel.PageName = pageName;
                 }
             }

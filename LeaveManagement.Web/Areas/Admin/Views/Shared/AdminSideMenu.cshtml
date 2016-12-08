@@ -5,7 +5,7 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
 
-            <p class="centered"><a href="/Admin/AdminProfile/Edit"><img src="~/ProfilePictures/@Model.ProfilePath" class="img-circle" width="60"></a></p>
+            @*<p class="centered"><a href="/Admin/AdminProfile/Edit"><img src="~/ProfilePictures/@Model.ProfilePath" class="img-circle" width="60"></a></p>*@
             <h5 class="centered">@Model.Name</h5>
 
             <li class="mt">
@@ -20,7 +20,8 @@
                     <span>Profile</span>
                 </a>
                 <ul class="sub">
-                    <li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Edit">Edit Profile</a></li>
+                    @*<li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Edit">Edit Profile</a></li>*@
+                    <li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Register">Add New Employee</a></li>
                 </ul>
             </li>
             <li class="sub-menu">

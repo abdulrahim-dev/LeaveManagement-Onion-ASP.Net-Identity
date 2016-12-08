@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeaveManagement.Core.DomainModels;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LeaveManagement.Data
 {
@@ -16,20 +17,28 @@ namespace LeaveManagement.Data
     {
         protected override void Seed(LeaveContext context)
         {
-            //context.Student.Add(
-            //new EmployeeDetails
-            //{
-            //    StudentId =100,
-            //    Name = "Rahul Kapoor"
+            context.Roles.Add(new ApplicationIdentityRole()
+            {
+                Name = "Admin"
+            });
+            context.Roles.Add(new ApplicationIdentityRole()
+            {
+                Name = "Manager"
+            });
+            context.Roles.Add(new ApplicationIdentityRole()
+            {
+                Name = "User"
+            });
 
-            //});
-            //context.Student.Add(
-            //new EmployeeDetails
-            //{
-            //    StudentId = 101,
-            //    Name = "Salman Khan"
-            //});
+            context.Users.Add(new ApplicationIdentityUser()
+            {
+                Email="abc@aol.com",UserName="abc@aol.com",PasswordHash="12345",Roles = { new ApplicationIdentityUserRole() {RoleId=1} }
+            });
+
+            
             base.Seed(context);
         }
     }
+
+   
 }

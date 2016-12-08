@@ -15,10 +15,10 @@ namespace LeaveManagement.Web.Controllers
     {
         private IApplicationUserManager _userManager;
         private readonly IApplicationRoleManager _roleManager;
-        private readonly IService<EmployeeDetails> _employeeService;
+        private readonly IService<UserProfile> _employeeService;
 
 
-        public AccountController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<EmployeeDetails> employeeService)
+        public AccountController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<UserProfile> employeeService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -160,7 +160,7 @@ namespace LeaveManagement.Web.Controllers
                         var currentuser = await _userManager.FindByNameAsync(model.Email);
                         if (currentuser != null)
                         {
-                            EmployeeDetails emp = new EmployeeDetails
+                            UserProfile emp = new UserProfile
                             {
                                 Name = model.Name,
                                 UserId = currentuser.Id
