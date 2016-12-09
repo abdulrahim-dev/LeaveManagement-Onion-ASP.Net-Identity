@@ -6,7 +6,7 @@
 @model LeaveManagement.Web.Models.RegisterViewModel
 
 <section class="wrapper">
-    <h3><i class="fa fa-angle-right"></i> Edit Profile</h3>
+    <h3><i class="fa fa-angle-right"></i> Add New User</h3>
 
     <!-- BASIC FORM ELELEMNTS -->
     <div class="row mt">
@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 col-sm-2 control-label">User Type</label>
                         <div class="col-sm-10">
-                            @Html.DropDownListFor(m => m.UserRole,new SelectList(Model.ApplicationRoles, "Name", "Name"))
+                            @Html.DropDownListFor(m => m.UserRole,new SelectList(Model.ApplicationRoles, "Name", "Name"), new { @class = "form-control"})
                         </div>
                     </div>
 

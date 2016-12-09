@@ -295,6 +295,8 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\AdminProfile\Register.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminProfile\Users.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminProfile\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

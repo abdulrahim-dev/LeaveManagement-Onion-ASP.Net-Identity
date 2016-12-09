@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LeaveManagement.Core.DomainModels;
+using LeaveManagement.Core.DomainModels.AdminProfile;
 using LeaveManagement.Core.DomainModels.Identity;
 using LeaveManagement.Core.Identity;
 using LeaveManagement.Core.Services;
@@ -18,12 +19,15 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
         private readonly IApplicationUserManager _userManager;
         private readonly IApplicationRoleManager _roleManager;
         private readonly IService<UserProfile> _employeeService;
+        private readonly IAdminProfileService _adminProfileService;
 
-        public AdminProfileController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<UserProfile> employeeService)
+        public AdminProfileController(IApplicationUserManager userManager, IApplicationRoleManager roleManager, IService<UserProfile> employeeService,
+            IAdminProfileService adminProfileService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _employeeService = employeeService;
+            _adminProfileService = adminProfileService;
         }
 
         public string UserName
@@ -87,6 +91,36 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
             }
             // If we got this far, something failed, redisplay form
 
+            return View(model);
+        }
+
+        public ActionResult Users()
+        {
+            var model = _adminProfileService.GetList();
+            ViewBag.PageName = "Users";
+            return View(model);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var model = _adminProfileService.GetUserById(id);
+            ViewBag.PageName = "Users";
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _adminProfileService.UpdateUSer(model);
+                if (result)
+                {
+                    ViewBag.PageName = "Users";
+                    return View("Users");
+                }
+            }
             return View(model);
         }
 

@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model LeaveManagement.Core.DomainModels.AdminProfile.ProfileViewModel
+<section class="wrapper">
+    <h3><i class="fa fa-angle-right"></i> Edit User</h3>
+
+    <!-- BASIC FORM ELELEMNTS -->
+    <div class="row mt">
+        <div class="col-lg-12">
+            <div class="form-panel">
+                @using (Html.BeginForm("Edit", "AdminProfile", FormMethod.Post, new { @class = "form-horizontal style-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x=>x.UserId)
+                    @*<div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">User Type</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(m => m.UserRole, new SelectList(Model.ApplicationRoles, "Name", "Name"), new { @class = "form-control" })
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", autofocus = "autofocus", placeholder = "Name" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autofocus = "autofocus", placeholder = "User ID", @disabled = "disabled" })
+                        </div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="col-lg-10">
+                            <button type="submit" class="btn btn-default">Update</button>
+                        </div>
+                    </div>
+                    <span class="bg-danger">@Html.ValidationSummary(true)</span>
+                }
+
+            </div>
+        </div><!-- col-lg-12-->
+    </div><!-- /row -->
+</section>
+

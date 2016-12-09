@@ -2,8 +2,10 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using LeaveManagement.Core.Data;
+using LeaveManagement.Core.Interfaces;
 using LeaveManagement.Core.Services;
 using LeaveManagement.Data;
+using LeaveManagement.Data.Implementations;
 using LeaveManagement.DI;
 using LeaveManagement.Services;
 using LeaveManagement.Web;
@@ -27,6 +29,9 @@ namespace LeaveManagement.DI
             builder.RegisterGeneric(typeof(EntityRepository<>)).As(typeof(IRepository<>)).InstancePerRequest();
             builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerRequest();
             builder.RegisterType(typeof(UnitOfWork)).As(typeof(IUnitOfWork)).InstancePerRequest();
+
+            builder.RegisterType(typeof(AdminProfileService)).As(typeof(IAdminProfileService)).InstancePerRequest();
+            builder.RegisterType(typeof(AdminProfileRepository)).As(typeof(IAdminProfileRepository)).InstancePerRequest();
 
             builder.Register<IEntitiesContext>(b =>
             {

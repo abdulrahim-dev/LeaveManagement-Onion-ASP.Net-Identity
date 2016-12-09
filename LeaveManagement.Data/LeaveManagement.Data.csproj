@@ -98,6 +98,7 @@
     <Compile Include="Identity\IdentityFactory.cs" />
     <Compile Include="Identity\SmsService.cs" />
     <Compile Include="IEntitiesContext.cs" />
+    <Compile Include="Implementations\AdminProfileRepository.cs" />
     <Compile Include="LeaveContext.cs" />
     <Compile Include="LeaveContextInitalizeDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
