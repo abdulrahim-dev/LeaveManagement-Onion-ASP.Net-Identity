@@ -63,7 +63,9 @@
     <Compile Include="DomainModels\Identity\ApplicationUserLoginInfo.cs" />
     <Compile Include="DomainModels\Identity\ApplicationUserRole.cs" />
     <Compile Include="DomainModels\Identity\AppUser.cs" />
+    <Compile Include="DomainModels\Month.cs" />
     <Compile Include="DomainModels\PaginatedList.cs" />
+    <Compile Include="DomainModels\PaySlip.cs" />
     <Compile Include="DomainModels\UserProfile.cs" />
     <Compile Include="Domain\Login\LoginModel.cs" />
     <Compile Include="Domain\Login\LoginStatus.cs" />
