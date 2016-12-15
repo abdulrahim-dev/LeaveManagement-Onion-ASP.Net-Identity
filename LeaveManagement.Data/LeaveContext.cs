@@ -22,6 +22,12 @@ namespace LeaveManagement.Data
         //New Tables
         public DbSet<UserProfile> Employee { get; set; }
 
+        public DbSet<PaySlip> PaySlip { get; set; }
+
+        public DbSet<Year> Year { get; set; }
+
+        public DbSet<Month> Month { get; set; }
+
         /// <summary>
         /// Fluent API is another way to configure your domain classes. Fluent API provides more functionality for configuration than DataAnnotations....
         /// EntityTypeConfiguration is an important class in Fluent API. EntityTypeConfiguration provides you important methods to configure entities and its properties to override various Code-First conventions. It can be obtained by calling the Entity<TEntity>() method of DbModelBuilder class
@@ -30,6 +36,7 @@ namespace LeaveManagement.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new EmployeeDetailsMap());
+            modelBuilder.Configurations.Add(new PaySlipMap());
             base.OnModelCreating(modelBuilder);
         }
 

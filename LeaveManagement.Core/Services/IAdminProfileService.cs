@@ -9,7 +9,8 @@ namespace LeaveManagement.Core.Services
 {
     public interface IAdminProfileService
     {
-        List<ProfileViewModel> GetList();
+        ProfileViewModelList GetList(string userName, int pageIndex, int pageSize);
+        List<Users> GetUsers();
         ProfileViewModel GetUserById(int id);
 
         bool UpdateUSer(ProfileViewModel profileViewModel);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +41,6 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
         }
         //
         // GET: /Account/Register
-        [AllowAnonymous]
         public ActionResult Register()
         {
             RegisterViewModel model = new RegisterViewModel();
@@ -52,7 +52,6 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
 
         public async Task<ActionResult> Register(RegisterViewModel model)
@@ -67,12 +66,6 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, Request.Url == null ? "" : Request.Url.Scheme);
-                    // await _userManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    // ViewBag.Link = callbackUrl;
-                    // return View("DisplayEmail");
-
                     var currentuser = await _userManager.FindByNameAsync(model.Email);
                     if (currentuser != null)
                     {
@@ -89,14 +82,15 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
 
                 }
             }
-            // If we got this far, something failed, redisplay form
-
             return View(model);
         }
 
         public ActionResult Users()
         {
-            var model = _adminProfileService.GetList();
+            int pageIndex=0;
+            int pageSize = ConfigurationManager.AppSettings["PageSize"]!=null?Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]):5;
+            pageIndex = Request.QueryString["page"] != null ? Convert.ToInt32(Request.QueryString["page"]) : 1;
+            var model = _adminProfileService.GetList(UserName, pageIndex, pageSize);
             ViewBag.PageName = "Users";
             return View(model);
         }
@@ -118,7 +112,7 @@ namespace LeaveManagement.Web.Areas.Admin.Controllers
                 if (result)
                 {
                     ViewBag.PageName = "Users";
-                    return View("Users");
+                    return RedirectToAction("Users");
                 }
             }
             return View(model);

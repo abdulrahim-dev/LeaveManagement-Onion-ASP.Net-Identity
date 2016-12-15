@@ -1,4 +1,5 @@
-﻿@model IEnumerable<LeaveManagement.Core.DomainModels.AdminProfile.ProfileViewModel>
+﻿@using System.Configuration
+@model LeaveManagement.Core.DomainModels.AdminProfile.ProfileViewModelList
 
 @{
     ViewBag.Title = "Users";
@@ -17,16 +18,16 @@
                     <table class="table table-bordered table-striped table-condensed">
                         <tr>
                             <th class="numeric">
-                                @Html.DisplayNameFor(model => model.Name)
+                                @Html.DisplayNameFor(model => model.ProfileViewModels.FirstOrDefault().Name)
                             </th>
                             <th class="numeric">
-                                @Html.DisplayNameFor(model => model.UserName)
+                                @Html.DisplayNameFor(model => model.ProfileViewModels.FirstOrDefault().UserName)
                             </th>
 
                             <th class="numeric"></th>
                         </tr>
 
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.ProfileViewModels)
                         {
                             <tr>
 
@@ -38,13 +39,38 @@
                                 </td>
 
                                 <td class="numeric">
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
-                                    @Html.ActionLink("Delete", "Delete", new {/* id=item.PrimaryKey */})
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) 
                                 </td>
                             </tr>
                         }
 
                     </table>
+
+                    
+                        <table class="table-bordered table-striped table-condensed">
+                            <tr>
+                            @{
+                                var totalCount = Model.TotalCount;
+                                int pageSize = ConfigurationManager.AppSettings["PageSize"] != null ? Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]) : 5;
+                                if (totalCount > pageSize)
+                                {
+                                    int i = 0;
+                                    int page = 1;
+                                    while (i < totalCount)
+                                    {
+                                        <td>
+                                           <a href="/Admin/AdminProfile/Users?page=@page">@page</a>
+                                        </td>
+                                        page++;
+                                        i = i + pageSize;
+                                    }
+                                }
+                            }
+                               
+                            </tr>
+                        </table>
+                    
+
                 </section>
             </div><!-- /content-panel -->
         </div><!-- /col-lg-4 -->

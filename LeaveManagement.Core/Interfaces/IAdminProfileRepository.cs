@@ -10,7 +10,8 @@ namespace LeaveManagement.Core.Interfaces
 {
     public interface IAdminProfileRepository
     {
-        List<ProfileViewModel> GetList();
+        ProfileViewModelList GetList(string userName, int pageIndex, int pageSize);
+        List<Users> GetUsers();
         ProfileViewModel GetUserById(int id);
         UserProfile GetUserProfileById(int id);
     }

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model LeaveManagement.Web.Models.PaySlipViewModel
+<h2>List</h2>
+<section class="wrapper">
+    <h3><i class="fa fa-angle-right"></i> List Of Payslip</h3>
+    <div class="row mt">
+        <div class="col-lg-12">
+            <div class="content-panel">
+                @*<h4><i class="fa fa-angle-right"></i> Responsive Table</h4>*@
+                <section id="unseen" style="padding: 18px;">
+                    <div class="form-panel">
+                        @using (Ajax.BeginForm("GetPaySlipList", "PaySlip", new AjaxOptions
+                        {//GetPatients is name of method in PatientController
+                            HttpMethod = "POST",
+                            InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+                            UpdateTargetId = "ListOfItems",
+                            LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
+                        }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    @Html.DropDownListFor(m => m.UserId, new SelectList(Model.Users, "UserId", "Name"), "-Select User-", new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.DropDownListFor(m => m.YearId, new SelectList(Model.Years, "Id", "Name"), "-Select Year-", new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.DropDownListFor(m => m.MonthId, new SelectList(Model.Months, "Id", "Name"), "-Select Month-", new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-3">
+                                    <button type="submit" id="btnSearch" class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                           
+                        }
+                        <div id="loader"  style="display:none">
+                            Loading...<img src="http://loading.io/loader/?use=eyJzaXplIjo2MSwic3BlZWQiOjEsImNiayI6IiNmZmZmZmYiLCJjMSI6IiNiODhlMmIiLCJjMiI6IiM5YjliZDEiLCJ0eXBlIjoiZ2VhcnMifQ==" />
+                        </div>
+                        <div id="ListOfItems">
+
+                        </div>
+                    </div>
+                </section>
+            </div><!-- /content-panel -->
+        </div><!-- /col-lg-4 -->
+    </div><!-- /row -->
+</section><!--/wrapper-->

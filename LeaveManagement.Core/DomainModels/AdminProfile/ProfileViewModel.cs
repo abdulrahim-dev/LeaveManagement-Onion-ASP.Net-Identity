@@ -14,9 +14,25 @@ namespace LeaveManagement.Core.DomainModels.AdminProfile
 
         [Required]
         public string Name { get; set; }
-        [Required]
+
         [EmailAddress(ErrorMessage = "Please Enter a valid email Adrdress!!")]
         public string UserName { get; set; }
 
+    }
+
+    public class ProfileViewModelList
+    {
+        public IEnumerable<ProfileViewModel> ProfileViewModels;
+        public int TotalCount;
+    }
+
+    public class Users
+    {
+        [Required]
+        public int UserId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+        
     }
 }

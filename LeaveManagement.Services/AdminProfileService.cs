@@ -22,10 +22,15 @@ namespace LeaveManagement.Services
             _repository = repository;
             UnitOfWork = unitOfWork;
         }
-
-        public List<ProfileViewModel> GetList()
+        
+        public ProfileViewModelList GetList(string userName, int pageIndex, int pageSize)
         {
-           return _adminProfile.GetList();
+           return _adminProfile.GetList(userName, pageIndex, pageSize);
+        }
+
+        public List<Users> GetUsers()
+        {
+            return _adminProfile.GetUsers();
         }
         public ProfileViewModel GetUserById(int id)
         {

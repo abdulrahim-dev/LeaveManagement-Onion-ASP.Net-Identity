@@ -15,27 +15,35 @@ namespace LeaveManagement.Data.Implementations
         readonly LeaveContext _context = new LeaveContext();
 
         
-        public List<ProfileViewModel> GetList()
+        public ProfileViewModelList GetList(string userName, int pageIndex, int pageSize)
+        {
+            var listOfUsers = (_context.Users.Where(x=>x.UserName!=userName).Join(_context.Employee,
+                user => user.Id, userprofile => userprofile.UserId,
+                (user, userprofile) => new { UserId = user.Id, Name = userprofile.Name, UserName = user.UserName }));
+
+            int totalCount = listOfUsers.Count();
+            int pages = pageSize*(pageIndex - 1);
+            listOfUsers = listOfUsers.OrderBy(x=>x.Name).Skip(pages).Take(pageSize);
+            ProfileViewModelList model=new ProfileViewModelList()
+            {
+                ProfileViewModels = listOfUsers.Select(item => new ProfileViewModel() { Name = item.Name, UserId = item.UserId, UserName = item.UserName }).ToList(),
+                TotalCount = totalCount
+            };
+            return model;
+        }
+
+        public List<Users> GetUsers()
         {
             var listOfUsers = (_context.Users.Join(_context.Employee,
                 user => user.Id, userprofile => userprofile.UserId,
-                (user, userprofile) => new { UserId = user.Id, Name = user.UserName, UserName = userprofile.Name }));
-
-
-            //(from user in _context.Users
-            // join
-            //     userprofile in _context.Employee on user.Id equals userprofile.UserId
-            // select new { UserId = user.Id, Name = user.UserName, UserName = userprofile.Name }).ToList()
-
-            return listOfUsers.Select(item => new ProfileViewModel() { Name = item.Name, UserId = item.UserId, UserName = item.UserName }).ToList();
+                (user, userprofile) => new { UserId = user.Id, Name = userprofile.Name })).OrderBy(x=>x.Name);
+           
+            return listOfUsers.Select(item => new Users() { Name = item.Name, UserId = item.UserId }).ToList();
         }
+
+
         public ProfileViewModel GetUserById(int id)
         {
-            //var listOfUsers = (from user in _context.Users
-            //                   where user.Id == id
-            //                   join
-            //                   userprofile in _context.Employee on user.Id equals userprofile.UserId
-            //                   select new { UserId = user.Id, Name = user.UserName, UserName = userprofile.Name }).FirstOrDefault();
             var listOfUsers = (_context.Users.Where(user => user.Id == id)
                    .Join(_context.Employee, user => user.Id, userprofile => userprofile.UserId,
                     (user, userprofile) => new {UserId = user.Id, UserName = user.UserName, Name = userprofile.Name})).FirstOrDefault();
@@ -50,7 +58,7 @@ namespace LeaveManagement.Data.Implementations
 
         public UserProfile GetUserProfileById(int id)
         {
-            return _context.Employee.FirstOrDefault(x => x.Id == id);
+            return _context.Employee.FirstOrDefault(x => x.UserId == id);
         }
 
       

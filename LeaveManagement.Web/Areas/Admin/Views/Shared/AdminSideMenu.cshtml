@@ -15,16 +15,29 @@
                 </a>
             </li>
             <li class="sub-menu">
-                <a href="javascript:;" class="@(Model.PageName=="Profile"||Model.PageName=="Users"?"active":"")">
+                <a href="javascript:;" class="@(Model.PageName == "Profile" || Model.PageName == "Users" ? "active" : "")">
                     <i class="fa fa-desktop"></i>
                     <span>Profile</span>
                 </a>
                 <ul class="sub">
                     @*<li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Edit">Edit Profile</a></li>*@
-                    <li class="@(Model.PageName=="Users"?"active":"")"><a href="/Admin/AdminProfile/Users">All Users</a></li>
-                    <li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Register">Add New Employee</a></li>
+                    <li class="@(Model.PageName == "Users" ? "active" : "")"><a href="/Admin/AdminProfile/Users">All Users</a></li>
+                    <li class="@(Model.PageName == "Profile" ? "active" : "")"><a href="/Admin/AdminProfile/Register">Add New Employee</a></li>
                 </ul>
             </li>
+            <!-- -->
+            <li class="sub-menu">
+                <a href="javascript:;" class="@(Model.PageName=="PaySlip"||Model.PageName=="PaySlipAdd"?"active":"")">
+                    <i class="fa fa-book"></i>
+                    <span>PaySlip Upload</span>
+                </a>
+                <ul class="sub">
+                    @*<li class="@(Model.PageName=="Profile"?"active":"")"><a href="/Admin/AdminProfile/Edit">Edit Profile</a></li>*@
+                    <li class="@(Model.PageName=="PaySlip"?"active":"")"><a href="/Admin/PaySlip/List">List Of PaySlip By User</a></li>
+                    <li class="@(Model.PageName=="PaySlipAdd"?"active":"")"><a href="/Admin/PaySlip/New">Add New Payslip</a></li>
+                </ul>
+            </li>
+
             <li class="sub-menu">
                 <a href="javascript:;">
                     <i class="fa fa-desktop"></i>
